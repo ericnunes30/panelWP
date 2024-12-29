@@ -46,3 +46,8 @@ __pycache__/
 
 # Arquivos de configuração local
 *.local
+
+# Arquivos markdown na raiz (exceto README)
+planner.md
+planner-plugin-wp.md
+INSTALLER.md
