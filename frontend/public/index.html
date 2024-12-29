@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel WP - Login</title>
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f2f5;
+      }
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .login-box {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+      }
+      .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .login-header h1 {
+        color: #1976d2;
+        margin: 0;
+      }
+      .login-form input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .login-form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .login-form button:hover {
+        background-color: #1565c0;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>Você precisa de JavaScript para executar este aplicativo.</noscript>
+    <div id="root">
+      <div class="login-container">
+        <div class="login-box">
+          <div class="login-header">
+            <h1>Panel WP</h1>
+            <p>Conecte-se para gerenciar seus sites</p>
+          </div>
+          <form class="login-form" id="loginForm">
+            <input 
+              type="email" 
+              placeholder="E-mail" 
+              required 
+              id="emailInput"
+            >
+            <input 
+              type="password" 
+              placeholder="Senha" 
+              required 
+              id="passwordInput"
+            >
+            <button type="submit">Entrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+
+        // Credenciais de teste
+        if (email === 'admin@painel.com' && password === 'admin123') {
+          localStorage.setItem('isAuthenticated', 'true');
+          window.location.href = '/dashboard';
+        } else {
+          alert('Credenciais inválidas');
+        }
+      });
+    </script>
+  </body>
+</html>

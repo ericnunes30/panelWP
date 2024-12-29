@@ -1,0 +1,48 @@
+# Dependências
+node_modules/
+**/node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ambientes
+.env
+.venv
+venv/
+ENV/
+
+# Arquivos de build
+build/
+dist/
+*.egg-info/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Específicos do projeto
+frontend/build/
+backend/dist/
+
+# Segurança
+*.pem
+*.key
+
+# Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos de configuração local
+*.local
