@@ -1,57 +1,118 @@
-# 🌐 Panel WP - WordPress Management Dashboard
+# 🌐 Panel WP - Painel de Gerenciamento WordPress
 
-## 📝 Descrição
-Painel de gerenciamento e monitoramento de sites WordPress com recursos avançados de sincronização e análise.
+## 📋 Descrição
+Sistema de gerenciamento centralizado para múltiplos sites WordPress, focado em automação, monitoramento e segurança.
 
-## 🚀 Tecnologias
-- Frontend: React.js
-- Backend: Node.js + Express
-- Banco de Dados: PostgreSQL
-- Autenticação: JWT
-- Estilo: Material-UI
+## 🚀 Funcionalidades Principais
+- 🔐 Gerenciamento seguro de credenciais
+- 🔄 Sincronização automática com sites WordPress
+- 📊 Dashboard de monitoramento
+- 🛡️ Verificações de segurança
+- 🔍 Logs detalhados de atividades
 
-## 🔧 Instalação
+## 🛠️ Tecnologias
 
-### Pré-requisitos
+### Backend
+- Node.js + Express
+- PostgreSQL (Banco de dados)
+- Sequelize ORM
+- JWT (Autenticação)
+- bcryptjs (Criptografia)
+
+### Frontend
+- React.js
+- Material-UI
+- Axios
+- Context API
+- React Router
+
+## 🔧 Requisitos do Sistema
 - Node.js 16+
-- npm
-- PostgreSQL
-- Python 3.8+ (para instalador)
+- PostgreSQL 12+
+- npm ou yarn
 
-### Instalação Rápida
+## 📦 Instalação
+
+### Configuração do Ambiente
 ```bash
-# Clonar repositório
-git clone https://github.com/seu-usuario/panel-wp.git
+# Clone o repositório
+git clone https://github.com/ericnunes30/panelWP.git
 
-# Instalar dependências do backend
-cd panel-wp/backend
-npm install
-
-# Instalar dependências do frontend
-cd ../frontend
-npm install
-
-# Configurar .env
-cp .env.example .env
+# Entre no diretório
+cd panelWP
 ```
 
-## 📦 Scripts
-- `npm start` - Iniciar servidor de desenvolvimento
-- `npm run build` - Compilar para produção
-- `npm test` - Executar testes
+### Backend
+```bash
+# Entre no diretório do backend
+cd backend
 
-## 🔒 Variáveis de Ambiente
-Veja `.env.example` para configurações necessárias
+# Instale as dependências
+npm install
 
-## 🤝 Contribuição
-1. Fork do projeto
-2. Crie uma branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adicionar nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
+# Configure o arquivo .env
+cp .env.example .env
+
+# Inicie o servidor
+npm start
+```
+
+### Frontend
+```bash
+# Entre no diretório do frontend
+cd frontend
+
+# Instale as dependências
+npm install
+
+# Configure o arquivo .env
+cp .env.example .env
+
+# Inicie o aplicativo
+npm start
+```
+
+## ⚙️ Configuração
+1. Configure as variáveis de ambiente no arquivo `.env`:
+   ```env
+   # Backend
+   PORT=3001
+   DB_NAME=panel_wp
+   DB_USER=postgres
+   DB_PASSWORD=sua_senha
+   DB_HOST=localhost
+   DB_PORT=5432
+   JWT_SECRET=sua_chave_secreta
+
+   # Frontend
+   REACT_APP_API_URL=http://localhost:3001/api
+   ```
+
+## 🔒 Segurança
+- Todas as senhas são criptografadas
+- Autenticação via JWT
+- Proteção contra XSS e CSRF
+- Validação de dados
+- Logs de segurança
+
+## 🤝 Como Contribuir
+1. Faça um Fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
 
-## 📄 Licença
-MIT License
+## 📝 Licença
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🛠 Instalador
-Consulte `INSTALLER.md` para detalhes de instalação automatizada
+## 👥 Autores
+- **Eric Nunes** - *Desenvolvedor Principal* - [GitHub](https://github.com/ericnunes30)
+
+## 📞 Suporte
+- Email: decolevendasagencia@gmail.com
+- Issues: [GitHub Issues](https://github.com/ericnunes30/panelWP/issues)
+
+## 🌟 Agradecimentos
+- Comunidade WordPress
+- Contribuidores
+- Usuários que fornecem feedback
