@@ -78,9 +78,6 @@ cd frontend
 # Instale as dependências
 npm install
 
-# Configure o arquivo .env
-cp .env.example .env
-
 # Inicie o aplicativo
 npm start
 ```
