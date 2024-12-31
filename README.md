@@ -6,7 +6,9 @@ Sistema de gerenciamento centralizado para múltiplos sites WordPress, focado em
 ## 🚀 Funcionalidades Principais
 - 🔐 Gerenciamento seguro de credenciais
 - 🔄 Sincronização automática com sites WordPress
-- 📊 Dashboard de monitoramento
+- 📊 Dashboard de monitoramento em tempo real
+- 🌍 Adição de sites via modal em qualquer página
+- 🔑 Autenticação via API Key
 - 🛡️ Verificações de segurança
 - 🔍 Logs detalhados de atividades
 
@@ -23,8 +25,8 @@ Sistema de gerenciamento centralizado para múltiplos sites WordPress, focado em
 - React.js
 - Material-UI
 - Axios
-- Context API
-- React Router
+- Context API (Gerenciamento de Estado)
+- React Router (Navegação)
 
 ## 🔧 Requisitos do Sistema
 - Node.js 16+
@@ -33,16 +35,27 @@ Sistema de gerenciamento centralizado para múltiplos sites WordPress, focado em
 
 ## 📦 Instalação
 
-### Configuração do Ambiente
+### Instalação Automática (Recomendado)
 ```bash
 # Clone o repositório
 git clone https://github.com/ericnunes30/panelWP.git
 
 # Entre no diretório
 cd panelWP
+
+# Execute o script de instalação
+node install.js
 ```
 
-### Backend
+O script de instalação irá:
+1. Instalar todas as dependências do backend e frontend
+2. Buildar o frontend para produção
+3. Criar o primeiro usuário administrador
+4. Iniciar os servidores em modo produção
+
+### Instalação Manual (Alternativa)
+
+#### Backend
 ```bash
 # Entre no diretório do backend
 cd backend
@@ -57,7 +70,7 @@ cp .env.example .env
 npm start
 ```
 
-### Frontend
+#### Frontend
 ```bash
 # Entre no diretório do frontend
 cd frontend
@@ -90,10 +103,19 @@ npm start
 
 ## 🔒 Segurança
 - Todas as senhas são criptografadas
-- Autenticação via JWT
+- Autenticação via JWT e API Key
 - Proteção contra XSS e CSRF
 - Validação de dados
 - Logs de segurança
+- Gerenciamento seguro de sessões
+
+## 🌟 Novos Recursos (v1.1.0)
+- ✨ Modal de adição de sites acessível em qualquer página
+- 🔑 Autenticação simplificada via API Key
+- 📊 Dashboard com estatísticas em tempo real
+- 🎨 Interface melhorada com Material-UI
+- 🔄 Atualização automática da lista de sites
+- 🚀 Script de instalação automatizado
 
 ## 🤝 Como Contribuir
 1. Faça um Fork do projeto
@@ -105,14 +127,10 @@ npm start
 ## 📝 Licença
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 👥 Autores
-- **Eric Nunes** - *Desenvolvedor Principal* - [GitHub](https://github.com/ericnunes30)
+## 👨‍💻 Autor
+Eric Nunes - [GitHub](https://github.com/ericnunes30)
 
-## 📞 Suporte
-- Email: decolevendasagencia@gmail.com
-- Issues: [GitHub Issues](https://github.com/ericnunes30/panelWP/issues)
-
-## 🌟 Agradecimentos
-- Comunidade WordPress
-- Contribuidores
-- Usuários que fornecem feedback
+## 🙏 Agradecimentos
+- Equipe do WordPress
+- Comunidade React
+- Contribuidores do projeto
