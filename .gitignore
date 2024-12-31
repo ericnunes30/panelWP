@@ -5,7 +5,6 @@ npm-debug.log
 yarn-error.log
 
 # Ambientes
-.env
 .venv
 venv/
 ENV/

@@ -13,14 +13,36 @@ import {
   FormControl,
   InputLabel,
   Box,
-  Divider
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  InputAdornment,
+  Alert,
+  IconButton
 } from '@mui/material';
+import { 
+  AddCircle as AddCircleIcon,
+  Link as LinkIcon 
+} from '@mui/icons-material';
+import { useSiteContext } from '../contexts/SiteContext';
 
 function Settings() {
+  const { 
+    sites, 
+    addSite, 
+    openAddSiteModal, 
+    handleCloseAddSiteModal,
+    handleOpenAddSiteModal 
+  } = useSiteContext();
   const [language, setLanguage] = useState('pt-BR');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [apiKeyVisibility, setApiKeyVisibility] = useState(false);
   const [theme, setTheme] = useState('light');
+  const [newSiteUrl, setNewSiteUrl] = useState('');
+  const [newSiteApiKey, setNewSiteApiKey] = useState('');
+  const [addSiteError, setAddSiteError] = useState('');
 
   const handleSaveSettings = () => {
     // Lógica para salvar configurações
@@ -32,10 +54,101 @@ function Settings() {
     });
   };
 
+  const handleAddSite = async () => {
+    try {
+      // Validar URL
+      if (!newSiteUrl.startsWith('http://') && !newSiteUrl.startsWith('https://')) {
+        setAddSiteError('A URL deve começar com http:// ou https://');
+        return;
+      }
+
+      // Remover barra final se existir
+      const cleanUrl = newSiteUrl.endsWith('/') 
+        ? newSiteUrl.slice(0, -1) 
+        : newSiteUrl;
+
+      await addSite({
+        url: cleanUrl,
+        apiKey: newSiteApiKey
+      });
+
+      setNewSiteUrl('');
+      setNewSiteApiKey('');
+      setAddSiteError('');
+    } catch (err) {
+      setAddSiteError(err.message || 'Erro ao adicionar site');
+    }
+  };
+
   return (
     <Container maxWidth="md">
-      <Typography variant="h4" gutterBottom>
+      {/* Modal de Adicionar Site */}
+      <Dialog 
+        open={openAddSiteModal} 
+        onClose={handleCloseAddSiteModal}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Adicionar Novo Site</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="URL do Site"
+            type="url"
+            fullWidth
+            variant="outlined"
+            value={newSiteUrl}
+            onChange={(e) => setNewSiteUrl(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            }}
+            placeholder="https://exemplo.com.br"
+          />
+          <TextField
+            margin="dense"
+            label="Chave de API"
+            type="password"
+            fullWidth
+            variant="outlined"
+            value={newSiteApiKey}
+            onChange={(e) => setNewSiteApiKey(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          {addSiteError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {addSiteError}
+            </Alert>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAddSiteModal} color="secondary">
+            Cancelar
+          </Button>
+          <Button 
+            onClick={handleAddSite} 
+            color="primary" 
+            variant="contained"
+            disabled={!newSiteUrl || !newSiteApiKey}
+          >
+            Adicionar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Typography variant="h4" gutterBottom sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
         Configurações do Panel WP
+        <IconButton 
+          color="primary" 
+          sx={{ ml: 2 }}
+          onClick={() => handleOpenAddSiteModal()}
+        >
+          <AddCircleIcon />
+        </IconButton>
       </Typography>
 
       <Grid container spacing={3}>

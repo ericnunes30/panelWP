@@ -10,6 +10,7 @@ export const SiteProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [openAddSiteModal, setOpenAddSiteModal] = useState(false);
 
   // Estado de notificação
   const [notification, setNotification] = useState({
@@ -32,6 +33,17 @@ export const SiteProvider = ({ children }) => {
     setNotification(prev => ({ ...prev, open: false }));
   };
 
+  // Abrir modal de adicionar site
+  const handleOpenAddSiteModal = () => {
+    console.log('Abrindo modal de adicionar site');
+    setOpenAddSiteModal(true);
+  };
+
+  // Fechar modal de adicionar site
+  const handleCloseAddSiteModal = () => {
+    setOpenAddSiteModal(false);
+  };
+
   // Adicionar novo site
   const addSite = async (siteData) => {
     try {
@@ -43,27 +55,28 @@ export const SiteProvider = ({ children }) => {
 
       // Tentar autenticar com o site
       const response = await axios.post(apiEndpoint, {
-        username: siteData.username,
-        password: siteData.password
+        api_key: siteData.apiKey
       });
 
-      if (response.data.success) {
-        const newSite = {
-          ...siteData,
-          url: normalizedUrl,
-          id: Date.now(), // ID temporário
-          status: 'active'
-        };
+      console.log('Resposta da API:', response.data); // Log para debug
 
-        setSites(prevSites => [...prevSites, newSite]);
-        showNotification('Site adicionado com sucesso!', 'success');
-        return newSite;
-      } else {
-        throw new Error('Falha na autenticação com o site WordPress');
-      }
+      // Se chegou aqui é porque a requisição foi bem sucedida
+      const newSite = {
+        ...siteData,
+        url: normalizedUrl,
+        id: Date.now(), // ID temporário
+        status: 'active',
+        user: response.data // Salvar dados do usuário retornados pela API
+      };
+
+      setSites(prevSites => [...prevSites, newSite]);
+      showNotification('Site adicionado com sucesso!', 'success');
+      handleCloseAddSiteModal();
+      return newSite;
     } catch (error) {
       console.error('Erro ao adicionar site:', error);
-      showNotification(error.message || 'Erro ao adicionar site', 'error');
+      const errorMessage = error.response?.data?.message || error.message || 'Erro ao adicionar site';
+      showNotification(errorMessage, 'error');
       throw error;
     } finally {
       setLoading(false);
@@ -92,17 +105,26 @@ export const SiteProvider = ({ children }) => {
   };
 
   // Remover site
-  const removeSite = async (siteId) => {
+  const removeSite = async (siteUrl) => {
     try {
       setLoading(true);
       
-      setSites(prevSites => prevSites.filter(site => site.id !== siteId));
-      showNotification('Site removido com sucesso!', 'success');
+      // Remover o site do estado
+      setSites(prevSites => {
+        const newSites = prevSites.filter(site => site.url !== siteUrl);
+        
+        // Simular um delay para mostrar o loading
+        setTimeout(() => {
+          setLoading(false);
+          showNotification('Site removido com sucesso!', 'success');
+        }, 500);
+        
+        return newSites;
+      });
+
     } catch (error) {
       console.error('Erro ao remover site:', error);
-      showNotification(error.message || 'Erro ao remover site', 'error');
-      throw error;
-    } finally {
+      showNotification('Erro ao remover site', 'error');
       setLoading(false);
     }
   };
@@ -166,6 +188,40 @@ export const SiteProvider = ({ children }) => {
     }
   };
 
+  // Login em um site específico
+  const loginToSite = async (site) => {
+    try {
+      setLoading(true);
+      
+      const apiEndpoint = `${site.url}/wp-json/panel-wp/v1/authenticate`;
+      
+      const response = await axios.post(apiEndpoint, {
+        api_key: site.apiKey
+      });
+
+      // Atualizar o site com os dados do usuário
+      const updatedSite = {
+        ...site,
+        user: response.data,
+        status: 'active'
+      };
+
+      setSites(prevSites => 
+        prevSites.map(s => s.url === site.url ? updatedSite : s)
+      );
+
+      showNotification('Login realizado com sucesso!', 'success');
+      return updatedSite;
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Erro ao fazer login';
+      showNotification(errorMessage, 'error');
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Efeito para verificar status dos sites periodicamente
   useEffect(() => {
     const interval = setInterval(checkSitesStatus, 300000); // 5 minutos
@@ -178,12 +234,16 @@ export const SiteProvider = ({ children }) => {
     error,
     notification,
     currentUser,
+    openAddSiteModal,
     addSite,
     updateSite,
     removeSite,
     syncSites,
+    loginToSite,
     handleCloseNotification,
-    setCurrentUser
+    setCurrentUser,
+    handleOpenAddSiteModal,
+    handleCloseAddSiteModal
   };
 
   return (

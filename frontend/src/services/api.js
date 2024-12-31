@@ -12,7 +12,7 @@ export const userService = {
   },
 
   async login(credentials) {
-    const response = await api.post('/users/login', credentials);
+    const response = await api.post('/login', credentials);
     return response.data;
   },
 

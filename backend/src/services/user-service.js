@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const Logger = require('./logger');
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import Logger from './logger.js';
 
 class UserService {
   static async hashPassword(password) {
@@ -72,4 +72,4 @@ class UserService {
   }
 }
 
-module.exports = UserService;
+export default UserService;

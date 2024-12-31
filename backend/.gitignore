@@ -1,0 +1,21 @@
+# Dependências
+/node_modules
+package-lock.json
+
+# Arquivos de ambiente
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+/dist
+
+# Arquivos de IDE
+.vscode/
+.idea/
+
+# Misc
+.DS_Store

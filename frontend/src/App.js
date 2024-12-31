@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import SiteList from './pages/SiteList';
 import Settings from './pages/Settings';
+import Layout from './components/Layout';
 
 // Importar contextos
 import { AuthProvider } from './contexts/AuthContext';
@@ -51,6 +52,21 @@ const theme = createTheme({
 });
 
 function App() {
+  useEffect(() => {
+    const handleFocusError = (event) => {
+      console.error('Blocked aria-hidden error:', {
+        focusedElement: event.target,
+        ancestorWithAriaHidden: event.target.closest('[aria-hidden="true"]')
+      });
+    };
+
+    document.addEventListener('focus', handleFocusError, true);
+    
+    return () => {
+      document.removeEventListener('focus', handleFocusError, true);
+    };
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -60,31 +76,14 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route 
-                path="/dashboard" 
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/sites" 
-                element={
-                  <PrivateRoute>
-                    <SiteList />
-                  </PrivateRoute>
-                } 
-              />
-              <Route 
-                path="/settings" 
-                element={
-                  <PrivateRoute>
-                    <Settings />
-                  </PrivateRoute>
-                } 
-              />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              
+              <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
+                <Route index element={<Dashboard />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="sites" element={<SiteList />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
             <GlobalNotification />

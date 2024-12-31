@@ -26,11 +26,14 @@ import {
 } from '@mui/icons-material';
 import { 
   Link, 
-  Routes, 
-  Route, 
+  Outlet, 
   useNavigate, 
   Navigate 
 } from 'react-router-dom';
+
+// Importar contextos
+import { useAuth } from '../contexts/AuthContext';
+import { useSiteContext } from '../contexts/SiteContext';
 
 // Importar páginas
 import Dashboard from '../pages/Dashboard';
@@ -44,24 +47,19 @@ const miniDrawerWidth = 64;
 export default function Layout() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated');
-    setIsAuthenticated(authStatus === 'true');
-
-    if (!authStatus) {
-      navigate('/login');
-    }
-  }, [navigate]);
+  const { isAuthenticated, user, logout } = useAuth();
+  const { 
+    sites, 
+    handleOpenAddSiteModal, 
+    openAddSiteModal 
+  } = useSiteContext();
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    navigate('/login');
+    logout();
   };
 
   // Se não estiver autenticado, redirecionar para login
@@ -109,7 +107,7 @@ export default function Layout() {
                 bgcolor: 'primary.main' 
               }}
             >
-              EA
+              {user?.nome ? user.nome.charAt(0).toUpperCase() : 'EA'}
             </Avatar>
           </Box>
         </Toolbar>
@@ -176,12 +174,14 @@ export default function Layout() {
               button 
               component={item.path ? Link : 'div'}
               to={item.path || undefined}
-              onClick={item.action === 'openAddSiteModal' ? () => {
-                const dashboardElement = document.querySelector('[data-testid="dashboard-add-site-button"]');
-                if (dashboardElement) {
-                  dashboardElement.click();
-                }
-              } : undefined}
+              onClick={item.action === 'openAddSiteModal' 
+                ? (e) => {
+                  e.preventDefault(); // Previne navegação
+                  console.log('Clicou em adicionar site');
+                  handleOpenAddSiteModal();
+                } 
+                : undefined
+              }
               sx={{ 
                 borderRadius: 2, 
                 m: 1,
@@ -203,40 +203,29 @@ export default function Layout() {
               </ListItemIcon>
               <ListItemText 
                 primary={item.text} 
-                sx={{ 
-                  opacity: open ? 1 : 0,
-                  display: open ? 'block' : 'none'
-                }} 
+                sx={{ opacity: open ? 1 : 0 }} 
               />
             </ListItem>
           ))}
         </List>
       </Drawer>
-      
+
       <Box 
         component="main" 
         sx={{ 
           flexGrow: 1, 
-          p: 3, 
-          mt: 8,
+          p: 3,
           width: `calc(100% - ${open ? drawerWidth : miniDrawerWidth}px)`,
-          backgroundColor: 'background.default',
           ml: `${open ? drawerWidth : miniDrawerWidth}px`,
+          mt: '64px',
           transition: (theme) => theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
         }}
       >
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/sites" element={<SiteList />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* Redirecionar qualquer rota não encontrada para login */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <Outlet />
       </Box>
     </Box>
   );
-};
+}

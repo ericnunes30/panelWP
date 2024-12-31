@@ -27,7 +27,8 @@ import {
   Language as LanguageIcon,
   Security as SecurityIcon,
   CloudSync as CloudSyncIcon,
-  Link as LinkIcon
+  Link as LinkIcon,
+  OpenInNew as OpenInNewIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,23 +37,20 @@ import { useSiteContext } from '../contexts/SiteContext';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const { sites, loading, error, removeSite, loginToSite, addSite } = useSiteContext();
-  const [openAddSiteModal, setOpenAddSiteModal] = useState(false);
+  const { 
+    sites, 
+    loading, 
+    error, 
+    removeSite, 
+    loginToSite, 
+    addSite,
+    openAddSiteModal,
+    handleCloseAddSiteModal,
+    handleOpenAddSiteModal
+  } = useSiteContext();
   const [newSiteUrl, setNewSiteUrl] = useState('');
   const [newSiteApiKey, setNewSiteApiKey] = useState('');
   const [addSiteError, setAddSiteError] = useState('');
-
-  const handleOpenAddSiteModal = () => {
-    setOpenAddSiteModal(true);
-    setAddSiteError('');
-  };
-
-  const handleCloseAddSiteModal = () => {
-    setOpenAddSiteModal(false);
-    setNewSiteUrl('');
-    setNewSiteApiKey('');
-    setAddSiteError('');
-  };
 
   const handleAddSite = async () => {
     try {
@@ -72,7 +70,9 @@ function Dashboard() {
         apiKey: newSiteApiKey
       });
 
-      handleCloseAddSiteModal();
+      setNewSiteUrl('');
+      setNewSiteApiKey('');
+      setAddSiteError('');
     } catch (err) {
       setAddSiteError(err.message || 'Erro ao adicionar site');
     }
@@ -86,8 +86,17 @@ function Dashboard() {
     }
   };
 
-  const handleRemoveSite = (siteUrl) => {
-    removeSite(siteUrl);
+  const handleRemoveSite = async (siteUrl) => {
+    try {
+      await removeSite(siteUrl);
+    } catch (err) {
+      console.error('Erro ao remover site:', err);
+    }
+  };
+
+  const handleOpenSite = (site) => {
+    // Abre o site em uma nova janela
+    window.open(site.url, '_blank');
   };
 
   if (loading) {
@@ -248,10 +257,17 @@ function Dashboard() {
                           <LoginIcon />
                         </IconButton>
                         <IconButton 
+                          color="primary" 
+                          onClick={() => handleOpenSite(site)}
+                        >
+                          <OpenInNewIcon />
+                        </IconButton>
+                        <IconButton 
                           color="error" 
                           onClick={() => handleRemoveSite(site.url)}
+                          disabled={loading}
                         >
-                          <DeleteIcon />
+                          {loading ? <CircularProgress size={24} /> : <DeleteIcon />}
                         </IconButton>
                       </Box>
                     </Card>

@@ -2,10 +2,12 @@
   "name": "panel-wp-backend",
   "version": "1.0.0",
   "description": "Backend server for Panel WP",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "prod": "NODE_ENV=production node src/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

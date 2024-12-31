@@ -1,5 +1,6 @@
-const express = require('express');
-const UserService = require('../services/user-service');
+import express from 'express';
+import UserService from '../services/user-service.js';
+
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
@@ -30,4 +31,4 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

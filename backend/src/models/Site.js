@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../services/database.js';
 
-const User = sequelize.define('User', {
+const Site = sequelize.define('Site', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -11,28 +11,28 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
+  url: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true
+      isUrl: true
     }
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  role: {
-    type: DataTypes.ENUM('admin', 'user'),
-    defaultValue: 'admin'
   },
   status: {
     type: DataTypes.ENUM('ativo', 'inativo'),
     defaultValue: 'ativo'
+  },
+  tipo: {
+    type: DataTypes.ENUM('wordpress', 'outros'),
+    defaultValue: 'wordpress'
+  },
+  credenciais: {
+    type: DataTypes.JSON,
+    allowNull: true
   }
 }, {
   timestamps: true
 });
 
-export default User;
+export default Site;

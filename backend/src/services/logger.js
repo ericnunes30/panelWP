@@ -1,4 +1,4 @@
-class Logger {
+export default class Logger {
   static info(message, meta = {}) {
     console.log(`[INFO] ${message}`, meta);
   }
@@ -17,5 +17,3 @@ class Logger {
     console.warn(`[WARN] ${message}`, meta);
   }
 }
-
-module.exports = Logger;

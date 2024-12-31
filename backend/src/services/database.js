@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const Logger = require('./logger');
+import { Sequelize } from 'sequelize';
+import Logger from './logger.js';
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'panel_wp',
@@ -9,36 +9,31 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
     dialect: 'postgres',
-    logging: (msg) => Logger.debug(msg)
+    logging: false
   }
 );
 
 async function testConnection() {
   try {
     await sequelize.authenticate();
-    Logger.info('🟢 Conexão com o banco de dados estabelecida com sucesso.');
+    Logger.info(' Conexão com o banco de dados estabelecida com sucesso.');
     return true;
   } catch (error) {
-    Logger.error('❌ Erro ao conectar com o banco de dados:', error);
+    Logger.error(' Erro ao conectar com o banco de dados:', error);
     return false;
   }
 }
 
 async function syncDatabase() {
   try {
-    Logger.info('Sincronizando modelos...');
-    await sequelize.sync({ 
+    await sequelize.sync({
       force: true,
       alter: true
     }); 
-    Logger.info('🟢 Tabelas sincronizadas com sucesso!');
+    Logger.info(' Tabelas sincronizadas com sucesso!');
   } catch (error) {
-    Logger.error('❌ Erro ao sincronizar banco de dados', error);
+    Logger.error(' Erro ao sincronizar banco de dados', error);
   }
 }
 
-module.exports = { 
-  sequelize, 
-  testConnection, 
-  syncDatabase 
-};
+export { sequelize, testConnection, syncDatabase };
